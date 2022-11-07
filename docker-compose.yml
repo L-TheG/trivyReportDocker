@@ -1,0 +1,16 @@
+version: "3.7"
+services: 
+  hugo-server:
+    build: .
+    ports: 
+     - "1313:1313"
+    command: sh -c "
+      git clone https://github.com/L-TheG/trivyReportToHugoMd.git 
+      && cd /trivyReportToHugoMd
+      && git clone --recursive https://github.com/L-TheG/hugoNewTrivyReportGenerator.git
+      && ln -s /report/report.json /trivyReportToHugoMd/src/data/report.json
+      && node /trivyReportToHugoMd/src/index.js outDir=/trivyReportToHugoMd/hugoNewTrivyReportGenerator/content
+      && cd hugoNewTrivyReportGenerator
+      && /hugo server --bind 0.0.0.0"
+    volumes:
+      - .:/report

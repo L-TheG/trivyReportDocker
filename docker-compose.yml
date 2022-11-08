@@ -9,8 +9,8 @@ services:
       && cd /trivyReportToHugoMd
       && git clone --recursive https://github.com/L-TheG/trivySecurityDocs.git
       && ln -s /report/report.json /trivyReportToHugoMd/src/data/report.json
-      && node /trivyReportToHugoMd/src/index.js outDir=/trivyReportToHugoMd/hugoNewTrivyReportGenerator/content
-      && cd hugoNewTrivyReportGenerator
+      && node /trivyReportToHugoMd/src/index.js outDir=/trivyReportToHugoMd/trivySecurityDocs/content
+      && cd trivySecurityDocs
       && /hugo server --bind 0.0.0.0"
     volumes:
       - .:/report

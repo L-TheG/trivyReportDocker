@@ -9,7 +9,7 @@ services:
       && cd /trivyReportToHugoMd
       && git clone --recursive https://github.com/L-TheG/trivySecurityDocs.git
       && ln -s /report/report.json /trivyReportToHugoMd/report.json
-      && npm install --only=production
+      && npm install
       && npm run build
       && node ./build/index.js outDir=/trivyReportToHugoMd/trivySecurityDocs/content
       && cd trivySecurityDocs

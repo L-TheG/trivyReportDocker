@@ -11,6 +11,7 @@ services:
       && ln -s /report/report.json /trivyReportToHugoMd/report.json
       && npm install
       && npm run build
+      && mkdir /trivyReportToHugoMd/trivySecurityDocs/content
       && node ./build/index.js --outDir=/trivyReportToHugoMd/trivySecurityDocs/content
       && cd trivySecurityDocs
       && /hugo server --bind 0.0.0.0"

@@ -1,6 +1,7 @@
-container_name: report_site_creator
+version: "3.7"
 services: 
   hugo-server:
+    container_name: "report_site_creator"
     build: .
     ports: 
      - "1313:1313"

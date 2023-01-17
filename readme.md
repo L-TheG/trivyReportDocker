@@ -5,7 +5,7 @@
 - The report should be generated with the ```trivy k8s``` ([reference](https://aquasecurity.github.io/trivy/v0.34/docs/kubernetes/cli/scanning/)) command
   - Example command to generate ```trivy k8s --kubeconfig <path/to/kubeconfig> --format json -o report.json cluster --timeout 90m0s```
 - the report must be in json format has to be named ```report.json```.
-- docker-compose should be installed and ready to run
+- docker and docker-compose should be installed and ready to run
 
 **Usage**
 run ```docker-compose up --build``` from this directory to start the service.

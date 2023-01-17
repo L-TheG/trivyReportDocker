@@ -1,4 +1,5 @@
 version: "3.7"
+container_name: report_site_creator
 services: 
   hugo-server:
     build: .
@@ -17,4 +18,4 @@ services:
       && /hugo -d /content"
     volumes:
       - .:/report
-      - .:/content
+      - ./content:/content

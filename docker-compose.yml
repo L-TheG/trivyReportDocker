@@ -6,14 +6,14 @@ services:
     ports: 
      - "1313:1313"
     command: sh -c "
-      git clone https://github.com/L-TheG/trivyReportToHugoMd.git 
+      git clone https://github.com/L-TheG/trivyReportToHugoMd.git
       && cd /trivyReportToHugoMd
       && git clone --recursive https://github.com/L-TheG/trivySecurityDocs.git
       && ln -s /report/report.json /trivyReportToHugoMd/report.json
       && npm install
       && npm run build
       && mkdir /trivyReportToHugoMd/trivySecurityDocs/content
-      && node ./build/index.js --outDir=/trivyReportToHugoMd/trivySecurityDocs/content --severity=CRITICAL
+      && node ./build/index.js --outDir=/--include=$INCLUDED_NAMESPACEStrivyReportToHugoMd/trivySecurityDocs/content --severity=$SEVERITY --exclude=$EXCLUDED_NAMESPACES
       && cd trivySecurityDocs
       && /hugo -d /content"
     volumes:

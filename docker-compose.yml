@@ -6,15 +6,19 @@ services:
     ports: 
      - "1313:1313"
     command: sh -c "
-      git clone https://github.com/L-TheG/trivyReportToHugoMd.git
+      echo 'Cloning necessary git repositories'
+      && git clone https://github.com/L-TheG/trivyReportToHugoMd.git --quiet
       && cd /trivyReportToHugoMd
-      && git clone --recursive https://github.com/L-TheG/trivySecurityDocs.git
+      && git clone --recursive https://github.com/L-TheG/trivySecurityDocs.git --quiet
       && ln -s /report/report.json /trivyReportToHugoMd/report.json
-      && npm install
-      && npm run build
+      && echo 'Preparing data preprocessing'
+      && npm --silent install
+      && npm --silent run build
       && mkdir /trivyReportToHugoMd/trivySecurityDocs/content
-      && node ./build/index.js --outDir=/--include=$INCLUDED_NAMESPACEStrivyReportToHugoMd/trivySecurityDocs/content --severity=$SEVERITY --exclude=$EXCLUDED_NAMESPACES
+      && echo 'Start data preprocessing'
+      && node ./build/index.js --outDir=/trivyReportToHugoMd/trivySecurityDocs/content --severity=$SEVERITY --exclude=$EXCLUDED_NAMESPACES --include=$INCLUDED_NAMESPACES
       && cd trivySecurityDocs
+      && echo 'Generating report'
       && /hugo -d /content"
     volumes:
       - .:/report

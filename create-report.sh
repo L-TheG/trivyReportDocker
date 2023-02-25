@@ -2,7 +2,7 @@
 
 # define default severity
 SEVERITY=CRITICAL
-
+NOSCAN=false
 # Parse Arguments
 # --------------------------------
 for i in "$@"; do
@@ -17,6 +17,10 @@ for i in "$@"; do
       ;;
     -ex=*|--excluded-namespaces=*)
       EXCLUDED_NAMESPACES="${i#*=}"
+      shift
+      ;;
+    -n=*|--noscan=*)
+      NOSCAN=true
       shift
       ;;
     -*|--*)
@@ -51,15 +55,20 @@ if [ -n "$INCLUDED_NAMESPACES" ]
 fi
 
 # ------------------------------------
-# Download trivy executable and run it
-echo "Installing Trivy executable"
-mkdir ./trivy
-curl -LJ -o ./trivy/trivy.tar.gz https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.tar.gz
-cd trivy
-tar -zxf trivy.tar.gz
-cd ..
-./trivy/trivy k8s --timeout 120m --report=all --format json -o report.json cluster
-rm -rf /trivy
+if ["$NOSCAN" = true]
+  then
+    # Download trivy executable and run it
+    echo "Installing Trivy executable"
+    mkdir ./trivy
+    curl -LJ -o ./trivy/trivy.tar.gz https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.tar.gz
+    cd trivy
+    tar -zxf trivy.tar.gz
+    cd ..
+    ./trivy/trivy k8s --timeout 120m --report=all --format json -o report.json cluster
+    rm -rf /trivy
+  else
+    echo "Trivy-Scan skipped"
+fi
 
 # Run the report generator using docker
 docker compose build -q

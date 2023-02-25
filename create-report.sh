@@ -62,7 +62,7 @@ if [ -n "$INCLUDED_NAMESPACES" ]
 fi
 
 # ------------------------------------
-if ["$NOSCAN" = "true"]
+if [ "$NOSCAN" = "true" ]
   then
     echo "Trivy-Scan skipped"
     rm -rf /content

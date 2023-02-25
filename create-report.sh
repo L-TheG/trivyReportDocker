@@ -59,7 +59,7 @@ cd trivy
 tar -zxf trivy.tar.gz
 cd ..
 ./trivy/trivy k8s --timeout 120m --report=all --format json -o report.json cluster
-rm /trivy -rf
+rm -rf /trivy
 
 # Run the report generator using docker
 docker compose build -q

@@ -2,8 +2,13 @@
 
 # define default severity
 SEVERITY=CRITICAL
+
 # set default scanning option
 NOSCAN=false
+
+# establish kubeconfig option
+KUBECONFIG
+
 # Parse Arguments
 # --------------------------------
 for i in "$@"; do
@@ -22,6 +27,10 @@ for i in "$@"; do
       ;;
     -n|--noscan)
       NOSCAN=true
+      shift
+      ;;
+    -c=*|--config=*)
+      KUBECONFIG="${i#*=}"
       shift
       ;;
     -*|--*)
@@ -65,7 +74,7 @@ if ["$NOSCAN" = true] ;
     cd trivy
     tar -zxf trivy.tar.gz
     cd ..
-    ./trivy/trivy k8s --timeout 120m --report=all --format json -o report.json cluster
+    ./trivy/trivy k8s $KUBECONFIG --timeout 120m --report=all --format json -o report.json cluster
     rm -rf /trivy
   else
     echo "Trivy-Scan skipped"

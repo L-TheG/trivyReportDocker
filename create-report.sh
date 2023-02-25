@@ -36,18 +36,18 @@ sed -i "s/\$SEVERITY/$SEVERITY/" docker-compose.yml
 
 # Add exluded namespaces to docker-compose
 if [ -n "$EXCLUDED_NAMESPACES" ]
-then
-  sed -i "s/--exclude=\$EXCLUDED_NAMESPACES/--exclude=$EXCLUDED_NAMESPACES/" docker-compose.yml
-else
-  sed -i "s/--exclude=\$EXCLUDED_NAMESPACES//" docker-compose.yml
+  then
+    sed -i "s/--exclude=\$EXCLUDED_NAMESPACES/--exclude=$EXCLUDED_NAMESPACES/" docker-compose.yml
+  else
+    sed -i "s/--exclude=\$EXCLUDED_NAMESPACES//" docker-compose.yml
 fi
 
 # Add included namespaces to docker-compose
 if [ -n "$INCLUDED_NAMESPACES" ]
-then
+  then
     sed -i "s/--include=\$INCLUDED_NAMESPACES/--include=$INCLUDED_NAMESPACES/" docker-compose.yml
-else
-  sed -i "s/--include=\$INCLUDED_NAMESPACES//" docker-compose.yml
+  else
+    sed -i "s/--include=\$INCLUDED_NAMESPACES//" docker-compose.yml
 fi
 
 # ------------------------------------
@@ -67,24 +67,24 @@ docker-compose run hugo-server
 docker-compose rm -f hugo-server
 
 # ------------------------------------
-# Restore docker-compose file original state
+# Restore docker-compose file to original state
 echo "Resetting docker-compose file"
 sed -i "s/$SEVERITY/\$SEVERITY/" docker-compose.yml
 
 if [ -n "$EXCLUDED_NAMESPACES" ]
-then
-  # if params are set, replace  current params with placeholder
-  sed -i "s/--exclude=$EXCLUDED_NAMESPACES/--exclude=\$EXCLUDED_NAMESPACES/" docker-compose.yml
-else
-  # if no parameters set, append whole setup
-  sed -i "/node .\/build\/index.js --outDir=\//s/$/--exclude=\$EXCLUDED_NAMESPACES/" docker-compose.yml
+  then
+    # if params are set, replace  current params with placeholder
+    sed -i "s/--exclude=$EXCLUDED_NAMESPACES/--exclude=\$EXCLUDED_NAMESPACES/" docker-compose.yml
+  else
+    # if no parameters set, append whole setup
+    sed -i "/node .\/build\/index.js --outDir=\//s/$/--exclude=\$EXCLUDED_NAMESPACES/" docker-compose.yml
 fi
 
 if [ -n "$INCLUDED_NAMESPACES" ]
-then
-  # if params are set, replace  current params with placeholder
-  sed -i "s/--include=$INCLUDED_NAMESPACES/--include=\$INCLUDED_NAMESPACES/" docker-compose.yml
-else
-  # if no parameters set, append whole setup
-  sed -i "/node .\/build\/index.js --outDir=\//s/$/--include=\$INCLUDED_NAMESPACES/" docker-compose.yml
+  then
+    # if params are set, replace  current params with placeholder
+    sed -i "s/--include=$INCLUDED_NAMESPACES/--include=\$INCLUDED_NAMESPACES/" docker-compose.yml
+  else
+    # if no parameters set, append whole setup
+    sed -i "/node .\/build\/index.js --outDir=\//s/$/--include=\$INCLUDED_NAMESPACES/" docker-compose.yml
 fi

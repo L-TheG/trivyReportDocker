@@ -57,7 +57,8 @@ mkdir ./trivy
 curl -LJ -o ./trivy/trivy.tar.gz https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.tar.gz
 cd trivy
 tar -zxf trivy.tar.gz
-./trivy k8s --timeout 120m --report=all --format json -o results.json cluster
+cd ..
+./trivy/trivy k8s --timeout 120m --report=all --format json -o results.json cluster
 cd ..
 rm /trivy -rf
 

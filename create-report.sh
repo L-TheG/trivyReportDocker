@@ -27,7 +27,7 @@ for i in "$@"; do
       shift
       ;;
     -c=*|--config=*)
-      KUBECONFIG="kubeconfig ${i#*=}"
+      KUBECONFIG="--kubeconfig ${i#*=}"
       echo "looking for kubeconfig at ${i#*=}"
       shift
       ;;

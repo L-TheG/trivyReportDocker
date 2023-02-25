@@ -3,9 +3,6 @@
 # define default severity
 SEVERITY=CRITICAL
 
-# set default scanning option
-NOSCAN="false"
-
 # establish kubeconfig option
 KUBECONFIG
 

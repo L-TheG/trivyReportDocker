@@ -19,7 +19,7 @@ for i in "$@"; do
       EXCLUDED_NAMESPACES="${i#*=}"
       shift
       ;;
-    -n=*|--noscan=*)
+    -n|--noscan)
       NOSCAN=true
       shift
       ;;

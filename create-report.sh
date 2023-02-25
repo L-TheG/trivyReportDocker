@@ -58,7 +58,7 @@ curl -LJ -o ./trivy/trivy.tar.gz https://github.com/aquasecurity/trivy/releases/
 cd trivy
 tar -zxf trivy.tar.gz
 cd ..
-./trivy/trivy k8s --timeout 120m --report=all --format json -o results.json cluster
+./trivy/trivy k8s --timeout 120m --report=all --format json -o report.json cluster
 rm /trivy -rf
 
 # Run the report generator using docker

@@ -69,7 +69,7 @@ if ["$NOSCAN" = true] ;
     rm -rf /trivy
   else
     echo "Trivy-Scan skipped"
-    rm -rf ./content
+    rm -rf /content
 fi
 
 # Run the report generator using docker

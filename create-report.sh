@@ -4,7 +4,7 @@
 SEVERITY=CRITICAL
 
 # establish kubeconfig option
-KUBECONFIG
+KUBECONFIG=""
 
 # Parse Arguments
 # --------------------------------
@@ -27,7 +27,8 @@ for i in "$@"; do
       shift
       ;;
     -c=*|--config=*)
-      KUBECONFIG="${i#*=}"
+      KUBECONFIG="kubeconfig ${i#*=}"
+      echo "looking for kubeconfig at ${i#*=}"
       shift
       ;;
     -*|--*)

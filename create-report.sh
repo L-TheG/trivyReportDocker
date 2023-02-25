@@ -61,7 +61,7 @@ if [ -n "$INCLUDED_NAMESPACES" ]
   else
     sed -i "s/--include=\$INCLUDED_NAMESPACES//" docker-compose.yml
 fi
-
+exit
 # ------------------------------------
 if [ "$NOSCAN" = "true" ]
   then

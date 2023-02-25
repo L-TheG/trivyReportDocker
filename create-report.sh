@@ -2,6 +2,7 @@
 
 # define default severity
 SEVERITY=CRITICAL
+# set default scanning option
 NOSCAN=false
 # Parse Arguments
 # --------------------------------
@@ -68,6 +69,7 @@ if ["$NOSCAN" = true]
     rm -rf /trivy
   else
     echo "Trivy-Scan skipped"
+    rm -rf ./content
 fi
 
 # Run the report generator using docker

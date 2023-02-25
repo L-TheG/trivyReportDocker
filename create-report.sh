@@ -6,6 +6,10 @@ SEVERITY=CRITICAL
 # establish kubeconfig option
 KUBECONFIG=""
 
+# reset docker compose 
+echo "Resetting docker-compose.yml"
+curl -s -LJ -o docker-compose.yml https://raw.githubusercontent.com/L-TheG/trivyReportDocker/main/docker-compose.yml > /dev/null
+
 # Parse Arguments
 # --------------------------------
 for i in "$@"; do
@@ -48,7 +52,7 @@ sed -i "s/\$SEVERITY/$SEVERITY/" docker-compose.yml
 
 # Add exluded namespaces to docker-compose
 if [ -n "$EXCLUDED_NAMESPACES" ]
-  then
+  then 
     sed -i "s/--exclude=\$EXCLUDED_NAMESPACES/--exclude=$EXCLUDED_NAMESPACES/" docker-compose.yml
   else
     sed -i "s/--exclude=\$EXCLUDED_NAMESPACES//" docker-compose.yml
@@ -61,48 +65,34 @@ if [ -n "$INCLUDED_NAMESPACES" ]
   else
     sed -i "s/--include=\$INCLUDED_NAMESPACES//" docker-compose.yml
 fi
-exit
+
 # ------------------------------------
 if [ "$NOSCAN" = "true" ]
   then
     echo "Trivy-Scan skipped"
-    rm -rf /content
   else
     # Download trivy executable and run it
     echo "Installing Trivy executable"
     mkdir ./trivy
-    curl -LJ -o ./trivy/trivy.tar.gz https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.tar.gz
+    curl -s -LJ -o ./trivy/trivy.tar.gz https://github.com/aquasecurity/trivy/releases/download/v0.36.1/trivy_0.36.1_Linux-64bit.tar.gz > /dev/null
     cd trivy
     tar -zxf trivy.tar.gz
     cd ..
     ./trivy/trivy k8s $KUBECONFIG --timeout 120m --report=all --format json -o report.json cluster
-    rm -rf /trivy
+fi
+
+if sudo -n true 2>/dev/null;
+  then 
+    # remove old data
+    sudo rm -rf ./content
+  else
+    echo "----------------------------------------- ATTENTION: ------------------------------------------------"
+    echo "If you dont run this script as root, delete the ./content folder manually before running this script."
+    echo "Or else, the data from the previous report will be included in this report"
+    echo "-----------------------------------------------------------------------------------------------------"
 fi
 
 # Run the report generator using docker
 docker compose build -q
 docker-compose run hugo-server
 docker-compose rm -f hugo-server
-
-# ------------------------------------
-# Restore docker-compose file to original state
-echo "Resetting docker-compose file"
-sed -i "s/$SEVERITY/\$SEVERITY/" docker-compose.yml
-
-if [ -n "$EXCLUDED_NAMESPACES" ]
-  then
-    # if params are set, replace  current params with placeholder
-    sed -i "s/--exclude=$EXCLUDED_NAMESPACES/--exclude=\$EXCLUDED_NAMESPACES/" docker-compose.yml
-  else
-    # if no parameters set, append whole setup
-    sed -i "/node .\/build\/index.js --outDir=\//s/$/--exclude=\$EXCLUDED_NAMESPACES/" docker-compose.yml
-fi
-
-if [ -n "$INCLUDED_NAMESPACES" ]
-  then
-    # if params are set, replace  current params with placeholder
-    sed -i "s/--include=$INCLUDED_NAMESPACES/--include=\$INCLUDED_NAMESPACES/" docker-compose.yml
-  else
-    # if no parameters set, append whole setup
-    sed -i "/node .\/build\/index.js --outDir=\//s/$/--include=\$INCLUDED_NAMESPACES/" docker-compose.yml
-fi

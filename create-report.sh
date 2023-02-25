@@ -4,7 +4,7 @@
 SEVERITY=CRITICAL
 
 # set default scanning option
-NOSCAN=false
+NOSCAN="false"
 
 # establish kubeconfig option
 KUBECONFIG
@@ -26,7 +26,7 @@ for i in "$@"; do
       shift
       ;;
     -n|--noscan)
-      NOSCAN=true
+      NOSCAN="true"
       shift
       ;;
     -c=*|--config=*)
@@ -65,8 +65,11 @@ if [ -n "$INCLUDED_NAMESPACES" ]
 fi
 
 # ------------------------------------
-if ["$NOSCAN" = true]
+if ["$NOSCAN" = "true"]
   then
+    echo "Trivy-Scan skipped"
+    rm -rf /content
+  else
     # Download trivy executable and run it
     echo "Installing Trivy executable"
     mkdir ./trivy
@@ -76,9 +79,6 @@ if ["$NOSCAN" = true]
     cd ..
     ./trivy/trivy k8s $KUBECONFIG --timeout 120m --report=all --format json -o report.json cluster
     rm -rf /trivy
-  else
-    echo "Trivy-Scan skipped"
-    rm -rf /content
 fi
 
 # Run the report generator using docker

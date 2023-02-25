@@ -56,7 +56,7 @@ if [ -n "$INCLUDED_NAMESPACES" ]
 fi
 
 # ------------------------------------
-if ["$NOSCAN" = true]
+if ["$NOSCAN" = true] ;
   then
     # Download trivy executable and run it
     echo "Installing Trivy executable"
